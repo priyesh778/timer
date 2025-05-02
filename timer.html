@@ -1,0 +1,81 @@
+ <!DOCTYPE html>
+<html>
+<head>
+  <title>JavaScript Timer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+      background-color: blanchedalmond;
+    } 
+   
+    #timer {
+      font-size: 2rem;
+      font-family: monospace;
+      padding: 20px;
+      border: 2px solid #333;
+      display: inline-block;
+    }
+    
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      margin: 5px;
+      background-color: violet;      
+    }
+  </style>
+</head>
+<body>
+
+  <div id="timer">00:00:00.000</div>
+
+  <button onclick="startTimer()">Start</button>
+  <button onclick="stopTimer()">Stop</button>
+  <button onclick="resetTimer()">Reset</button>
+
+  <script>
+    let startTime, updatedTime, difference, timerInterval;
+    let running = false;
+
+    function updateTimerDisplay(time) {
+      const milliseconds = parseInt((time % 1000), 10);
+      const seconds = parseInt((time / 1000) % 60, 10);
+      const minutes = parseInt((time / (1000 * 60)) % 60, 10);
+      const hours = parseInt((time / (1000 * 60 * 60)) % 24, 10);
+
+      const formattedTime = 
+        String(hours).padStart(2, '0') + ":" +
+        String(minutes).padStart(2, '0') + ":" +
+        String(seconds).padStart(2, '0') + "." +
+        String(milliseconds).padStart(3, '0');
+
+      document.getElementById("timer").textContent = formattedTime;
+    }
+
+    function startTimer() {
+      if (!running) {
+        startTime = new Date().getTime() - (difference || 0);
+        timerInterval = setInterval(() => {
+          updatedTime = new Date().getTime();
+          difference = updatedTime - startTime;
+          updateTimerDisplay(difference);
+        }, 10);
+        running = true;
+      }
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+      running = false;
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      difference = 0;
+      running = false;
+      updateTimerDisplay(0);
+    }
+  </script>
+</body>
+</html>
